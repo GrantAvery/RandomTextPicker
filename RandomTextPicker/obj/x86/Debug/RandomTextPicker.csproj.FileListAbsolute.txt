@@ -1,0 +1,6 @@
+/Users/gra84632/Code/Personal/GitHub/RandomTextPicker/RandomTextPicker/bin/Debug/RandomTextPicker.exe
+/Users/gra84632/Code/Personal/GitHub/RandomTextPicker/RandomTextPicker/bin/Debug/RandomTextPicker.pdb
+/Users/gra84632/Code/Personal/GitHub/RandomTextPicker/RandomTextPicker/obj/x86/Debug/RandomTextPicker.csprojResolveAssemblyReference.cache
+/Users/gra84632/Code/Personal/GitHub/RandomTextPicker/RandomTextPicker/obj/x86/Debug/RandomTextPicker.csproj.CoreCompileInputs.cache
+/Users/gra84632/Code/Personal/GitHub/RandomTextPicker/RandomTextPicker/obj/x86/Debug/RandomTextPicker.exe
+/Users/gra84632/Code/Personal/GitHub/RandomTextPicker/RandomTextPicker/obj/x86/Debug/RandomTextPicker.pdb
