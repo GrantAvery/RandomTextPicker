@@ -13,16 +13,16 @@ $ csc Program.cs
 ```
 
 ## Run:
+### On PC
+
+```
+$ Program
+```
+
 ### On Mac
 
 You'll need [mono](https://www.mono-project.com/) installed but otherwise it isn't much more complicated.
 
 ```
 $ mono Program.exe
-```
-
-### On PC
-
-```
-$ Program
 ```
