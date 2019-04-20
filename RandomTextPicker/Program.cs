@@ -1,71 +1,151 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 
 namespace Randomizer
 {
     class MainClass
     {
+        public static bool quit = false;
+
         public static void Main(string[] args)
         {
-            bool quit = false;
-
             while (quit != true)
             {
-                Console.WriteLine("Welcome to Randomizer! Please list off the options you would like to pick from, and I'll select one of them randomly. " +
-                                  "Make sure each option is separated with a comma \",\":");
-                string list = Console.ReadLine();
+                string path = "";
+
+                if (File.Exists("../../../input.txt"))
+                {
+                    path = Path.GetFullPath("../../../input.txt");
+                }
+                else if (File.Exists("../input.txt"))
+                {
+                    path = Path.GetFullPath("../input.txt");
+                }
+
+                string list = "";
+                string[] vetoArray = { };
+
+                Console.WriteLine("Welcome to Randomizer! " +
+                    "Would you like to enter values manually (\"m\") or use the input file at " +
+                    "{0} (\"f\", or just hit Enter)?", path);
+                string method = Console.ReadLine().ToLower();
+
+                QuitCheck(method);
+
+                switch (method)
+                {
+                    case "m":
+                    case "manual":
+                    case "manually":
+                        Console.WriteLine("Please list off the options you would like to pick from, " +
+                            "and I'll select one of them randomly. " +
+                            "Make sure each option is separated with a comma \",\":");
+                        list = Console.ReadLine();
+                        break;
+                    default:
+                        if (File.Exists(path))
+                        {
+                            list = File.ReadAllText(path);
+                            Console.WriteLine("Here are the items being chosen from:");
+                            Console.WriteLine(list);
+
+                            Console.WriteLine("Would you like to veto any of the above options? " +
+                                "List them or press Enter to continue without vetoing any:");
+                            string vetos = Console.ReadLine();
+                            vetoArray = ListToArray(vetos);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error! There is no input file at that location.");
+                        }
+                        break;
+                }
+
                 Console.WriteLine();
 
-                if (list == "quit")
+                QuitCheck(list);
+
+                string[] itemArray = ListToArray(list);
+
+                if (vetoArray != null && itemArray != null)
                 {
-                    quit = true;
+                    itemArray = itemArray.Except(vetoArray).ToArray();
                 }
-                else if (!string.IsNullOrEmpty(list))
+
+                if (itemArray != null)
                 {
-                    string[] items = list.Split(',');
-
-                    Random randomizer = new Random();
-                    int rand = randomizer.Next(0, items.Length);
-
-                    int count = 0;
-                    foreach (string item in items)
+                    string selectedItem = RandomPicker(itemArray);
+                    if (!string.IsNullOrEmpty(selectedItem))
                     {
-                        string currentItem = item;
-
-                        if (rand == count)
-                        {
-                            if (currentItem.StartsWith(" "))
-                            {
-                                currentItem = currentItem.Substring(1);
-                            }
-
-                            Console.WriteLine("Here is the randomly-selected item:");
-                            Console.WriteLine(currentItem);
-                        }
-
-                        count++;
-                    }
-
-                    Console.WriteLine();
-                    Console.WriteLine("If you'd like to try again, hit Enter, or type \"quit\" to close the program");
-                    string end = Console.ReadLine().ToLower();
-
-                    if (end == "quit")
-                    {
-                        quit = true;
+                        Console.WriteLine("Here is the randomly-selected item:");
+                        Console.WriteLine(selectedItem);
                     }
                     else
                     {
-                        Console.WriteLine();
+                        Console.WriteLine("Sorry! An error occurred somewhere in the selection process.");
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Sorry! You need to input text for this program to work.");
 
+                    Console.WriteLine();
+                    Console.WriteLine("If you'd like to try again, hit Enter, " +
+                        "or type \"quit\" (\"q\") to close the program");
+                    string end = Console.ReadLine().ToLower();
+
+                    QuitCheck(end);
+
+                    Console.WriteLine();
                 }
             }
 
             Environment.Exit(0);
+        }
+
+        public static void QuitCheck(string input)
+        {
+            switch(input)
+            {
+                case "q":
+                case "quit":
+                    Environment.Exit(0);
+                    break;
+            }
+        }
+
+        public static string[] ListToArray(string input)
+        {
+            if (!string.IsNullOrEmpty(input))
+            {
+                string[] items = input.Split(',');
+                return items;
+            }
+
+            return null;
+        }
+
+        public static string RandomPicker(string[] itemArray)
+        {
+            Random randomizer = new Random();
+            int rand = randomizer.Next(0, itemArray.Length);
+
+            int count = 0;
+            foreach (string item in itemArray)
+            {
+                string currentItem = item;
+
+                if (rand == count)
+                {
+                    if (currentItem.StartsWith(" ", StringComparison.Ordinal))
+                    {
+                        currentItem = currentItem.Substring(1);
+                    }
+
+                    return currentItem;
+                }
+
+                count++;
+            }
+
+            return null;
         }
     }
 }
