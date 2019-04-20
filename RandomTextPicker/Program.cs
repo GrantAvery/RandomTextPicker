@@ -6,34 +6,28 @@ namespace Randomizer
 {
     class MainClass
     {
-        public static bool quit = false;
-
         public static void Main(string[] args)
         {
+            bool quit = false;
+
+            string path = GetPath();
+
             while (quit != true)
             {
-                string path = "";
-
-                if (File.Exists("../../../input.txt"))
-                {
-                    path = Path.GetFullPath("../../../input.txt");
-                }
-                else if (File.Exists("../input.txt"))
-                {
-                    path = Path.GetFullPath("../input.txt");
-                }
-
                 string list = "";
                 string[] vetoArray = { };
 
+                Console.WriteLine("====================");
+                Console.WriteLine();
                 Console.WriteLine("Welcome to Randomizer! " +
                     "Would you like to enter values manually (\"m\") or use the input file at " +
                     "{0} (\"f\", or just hit Enter)?", path);
-                string method = Console.ReadLine().ToLower();
+                string method = Console.ReadLine();
+                Console.WriteLine();
 
                 QuitCheck(method);
 
-                switch (method)
+                switch (method.ToLower())
                 {
                     case "m":
                     case "manual":
@@ -44,12 +38,12 @@ namespace Randomizer
                         list = Console.ReadLine();
                         break;
                     default:
-                        if (File.Exists(path))
+                        if (path != null)
                         {
                             list = File.ReadAllText(path);
                             Console.WriteLine("Here are the items being chosen from:");
                             Console.WriteLine(list);
-
+                            Console.WriteLine();
                             Console.WriteLine("Would you like to veto any of the above options? " +
                                 "List them or press Enter to continue without vetoing any:");
                             string vetos = Console.ReadLine();
@@ -57,7 +51,7 @@ namespace Randomizer
                         }
                         else
                         {
-                            Console.WriteLine("Error! There is no input file at that location.");
+                            Console.WriteLine("Error! There is no input.txt file at that location.");
                         }
                         break;
                 }
@@ -73,7 +67,7 @@ namespace Randomizer
                     itemArray = itemArray.Except(vetoArray).ToArray();
                 }
 
-                if (itemArray != null)
+                if (itemArray != null && itemArray.Length >= 2)
                 {
                     string selectedItem = RandomPicker(itemArray);
                     if (!string.IsNullOrEmpty(selectedItem))
@@ -89,10 +83,13 @@ namespace Randomizer
                     Console.WriteLine();
                     Console.WriteLine("If you'd like to try again, hit Enter, " +
                         "or type \"quit\" (\"q\") to close the program");
-                    string end = Console.ReadLine().ToLower();
+                    string end = Console.ReadLine();
 
                     QuitCheck(end);
-
+                }
+                else
+                {
+                    Console.WriteLine("Error! You have to supply at least 2 options to pick from.");
                     Console.WriteLine();
                 }
             }
@@ -100,9 +97,27 @@ namespace Randomizer
             Environment.Exit(0);
         }
 
+        public static string GetPath()
+        {
+            string fromVS = "../../../input.txt";
+            string fromTerminal = "../input.txt";
+
+            if (File.Exists(fromVS))
+            {
+                return Path.GetFullPath(fromVS);
+            }
+
+            if (File.Exists(fromTerminal))
+            {
+                return Path.GetFullPath(fromTerminal);
+            }
+
+            return null;
+        }
+
         public static void QuitCheck(string input)
         {
-            switch(input)
+            switch(input.ToLower())
             {
                 case "q":
                 case "quit":
