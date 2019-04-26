@@ -1,5 +1,8 @@
-# RandomTextPicker
-## Simple C# Console app to randomly select an item from a list of items
+<h1 align="center">
+  RandomTextPicker
+</h1>
+
+### Simple C# Console app to randomly select an item from a list of items
 
 I mostly made this to compete with a couple coworkers who had made their own randomizers for picking which restaurant to eat out at on a given day. Each had used a different language, so I made mine in C#.
 
