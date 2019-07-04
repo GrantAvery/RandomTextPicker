@@ -6,6 +6,7 @@
 
 I mostly made this to compete with a couple coworkers who had made their own randomizers for picking which restaurant to eat out at on a given day. Each had used a different language, so I made mine in C#.
 
+You'll want to put your own items in the input.txt file, or remove the file and manually input them via console each time.
 
 ## Build:
 
